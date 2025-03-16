@@ -15,7 +15,7 @@ class _HomepageState extends State<Homepage> {
         body: Container(
           color: Colors.red,
           alignment: Alignment.center,
-          child: Text('Homepage'),
+          child: Text('Homepage2'),
         ),
       ),
     );
