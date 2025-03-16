@@ -13,6 +13,7 @@ class _HomepageState extends State<Homepage> {
     return SafeArea(
       child: Scaffold(
         body: Container(
+          color: Colors.red,
           alignment: Alignment.center,
           child: Text('Homepage'),
         ),
