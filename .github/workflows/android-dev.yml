@@ -1,3 +1,38 @@
+#name: Flutter CI
+#
+#on:
+#  push:
+#    branches: [ main ]
+#  pull_request:
+#    branches: [ main ]
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v3
+#
+#      - name: Setup Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          flutter-version: '3.29.0'
+#
+#      - name: Install Dependencies
+#        run: flutter pub get
+#
+#      - name: Build Android APK
+#        run: flutter build apk --release
+#
+#      - name: Upload APK as Artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: app-release.apk
+#          path: build/app/outputs/flutter-apk/app-release.apk
+#
+
+
 name: Flutter CI
 
 on:
@@ -22,8 +57,19 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > android/app/upload-keystore.jks
+
+      - name: Decode key.properties
+        run: |
+          echo "${{ secrets.KEY_PROPERTIES }}" | base64 --decode > android/key.properties
+
       - name: Build Android APK
         run: flutter build apk --release
+
+      - name: Build Android App Bundle
+        run: flutter build appbundle --release
 
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
@@ -31,3 +77,8 @@ jobs:
           name: app-release.apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
+      - name: Upload App Bundle as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release.aab
+          path: build/app/outputs/bundle/release/app-release.aab
